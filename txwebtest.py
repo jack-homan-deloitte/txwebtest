@@ -52,7 +52,7 @@ class TestClient(object):
         finished = request.notifyFinish()
 
         def extract_response(none):
-            return TestResponse(request.responseCode or 200, request.outgoingHeaders,
+            return TestResponse(request.responseCode or 200, request.responseHeaders,
                     ''.join(request.written))
 
         def _render(resource):
@@ -91,7 +91,8 @@ class TestRequest(DummyRequest):
         self._finishedDeferreds = []
         self.requestHeaders = Headers(headers or {})
 
-        self.headers.update(dict((k.lower(), v) for k, v in (headers or {}).items()))
+        for k, v in (headers or {}).items():
+            self.responseHeaders.addRawHeader(k.lower(), v)
         self.method = method
         self.path = path
         self.code = None
@@ -131,7 +132,10 @@ class TestResponse(object):
         self.body = body
 
     def get_header(self, header):
-        return self.headers.get(header.lower())
+        values = self.headers.getRawHeaders(header.lower())
+        if values:
+            return values[0]
+        return None
 
     @property
     def text(self):
