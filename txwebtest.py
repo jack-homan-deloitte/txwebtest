@@ -122,6 +122,9 @@ class TestRequest(DummyRequest):
     def sentLength(self):
         return sum(len(thing) for thing in self.written)
 
+    def getClientIP(self):
+        return "127.0.0.1"
+
     def getRequestHostname(self, *args, **kwargs):
         return 'localhost'
 
