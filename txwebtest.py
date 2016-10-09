@@ -1,5 +1,6 @@
 from cStringIO import StringIO
 from twisted.internet import defer
+from twisted.python.urlpath import URLPath
 from twisted.web.server import Site, NOT_DONE_YET
 from twisted.web.test.test_web import DummyRequest
 from twisted.web.http_headers import Headers
@@ -123,6 +124,9 @@ class TestRequest(DummyRequest):
 
     def isSecure(self):
         return False
+
+    def URLPath(self):
+        return URLPath(path=self.path)  # FIXME: self.args
 
 
 class TestResponse(object):
