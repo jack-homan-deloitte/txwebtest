@@ -1,7 +1,7 @@
 from klein import Klein
 from twisted.internet import defer
 from twisted.trial.unittest import TestCase
-from txwebtest import TestClient
+from txwebtest import TestClient, TestRequest
 from urlparse import parse_qs
 
 
@@ -36,6 +36,13 @@ class Tests(TestCase):
         yield self.app.put('/names/4', 'name=Ann', status=200)
         yield self.app.delete('/names/4', status=200)
         yield self.app.get('/names/4', status=404)
+
+    @defer.inlineCallbacks
+    def test_sentLength(self):
+        yield self.app.put('/names/4', 'name=Ann', status=200)
+        request = TestRequest(path="/names/4", method="GET")
+        resp = yield self.app.request(request)
+        assert request.sentLength == len("Ann")
 
 
 def create_app():

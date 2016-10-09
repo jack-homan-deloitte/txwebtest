@@ -86,7 +86,6 @@ class TestClient(object):
 class TestRequest(DummyRequest):
     ''' DummyRequest just isn't good enough for klein. '''
 
-
     def __init__(self, path, method, content_type=None, params=None, content=None, headers=None):
         super(TestRequest, self).__init__(path.split('/'))
         self._finishedDeferreds = []
@@ -118,6 +117,10 @@ class TestRequest(DummyRequest):
                     self.args.update(parse_qs(content))
         else:
             self.content_type = None
+
+    @property
+    def sentLength(self):
+        return sum(len(thing) for thing in self.written)
 
     def getRequestHostname(self, *args, **kwargs):
         return 'localhost'
