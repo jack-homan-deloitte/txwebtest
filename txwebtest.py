@@ -131,6 +131,9 @@ class TestRequest(DummyRequest):
     def isSecure(self):
         return False
 
+    def getCookie(self, cookie):
+        return  # FIXME
+
     def URLPath(self):
         return URLPath(path=self.path)  # FIXME: self.args
 
