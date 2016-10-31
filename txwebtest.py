@@ -134,6 +134,9 @@ class TestRequest(DummyRequest):
     def getCookie(self, cookie):
         return  # FIXME
 
+    def addCookie(self, *args, **kwargs):
+        return  # FIXME
+
     def URLPath(self):
         return URLPath(path=self.path)  # FIXME: self.args
 
