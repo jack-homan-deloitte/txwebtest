@@ -86,7 +86,7 @@ class TestClient(object):
 class TestRequest(DummyRequest):
     ''' DummyRequest just isn't good enough for klein. '''
 
-    def __init__(self, path, method, content_type=None, params=None, content=None, headers=None):
+    def __init__(self, path, method="GET", content_type=None, params=None, content=None, headers=None):
         super(TestRequest, self).__init__(path.split('/'))
         self._finishedDeferreds = []
         self.requestHeaders = Headers(headers or {})
