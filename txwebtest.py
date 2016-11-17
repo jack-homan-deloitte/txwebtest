@@ -90,9 +90,6 @@ class TestRequest(DummyRequest):
         super(TestRequest, self).__init__(path.split('/'))
         self._finishedDeferreds = []
         self.requestHeaders = Headers(headers or {})
-
-        for k, v in (headers or {}).items():
-            self.responseHeaders.addRawHeader(k.lower(), v)  # Wait wat?
         self.method = method
         self.path = path
         self.code = None
