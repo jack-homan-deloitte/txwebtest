@@ -1,10 +1,11 @@
-from cStringIO import StringIO
+from _compat import StringIO
+from _compat import parse_qs
+
 from twisted.internet import defer
 from twisted.python.urlpath import URLPath
 from twisted.web.server import Site, NOT_DONE_YET
 from twisted.web.test.test_web import DummyRequest
 from twisted.web.http_headers import Headers
-from urlparse import parse_qs
 
 
 class TestClient(object):
@@ -53,10 +54,21 @@ class TestClient(object):
         finished = request.notifyFinish()
 
         def extract_response(none):
-            return TestResponse(request.responseCode or 200, request.responseHeaders,
-                    ''.join(request.written))
+            written = request.written
+            if isinstance(written, str):
+                written = written.encode("utf-8")
+            body = b''.join(written)
+            response_code = request.responseCode or 200
+            response_headers = request.responseHeaders
+            return TestResponse(response_code, response_headers, body)
 
         def _render(resource):
+            
+            if isinstance(request.postpath[0], str):
+                # FIX: Klein apparently only works with byte object
+                request.postpath = [
+                    x.encode("utf-8")for x in request.postpath
+                ]
             result = resource.render(request)
             if isinstance(result, str):
                 request.write(result)
@@ -123,7 +135,7 @@ class TestRequest(DummyRequest):
         return "127.0.0.1"
 
     def getRequestHostname(self, *args, **kwargs):
-        return 'localhost'
+        return b'localhost'
 
     def isSecure(self):
         return False
@@ -152,7 +164,10 @@ class TestResponse(object):
 
     @property
     def text(self):
-        return self.body
+        body = self.body
+        if not isinstance(body, str):
+            body = body.decode("utf-8")
+        return body
 
 
 try:

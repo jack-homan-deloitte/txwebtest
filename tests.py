@@ -2,7 +2,8 @@ from klein import Klein
 from twisted.internet import defer
 from twisted.trial.unittest import TestCase
 from txwebtest import TestClient, TestRequest
-from urlparse import parse_qs
+
+from _compat import parse_qs
 
 
 class Tests(TestCase):
@@ -13,7 +14,7 @@ class Tests(TestCase):
     def test_status_check(self):
         yield self.app.get('/names/4', status=404)
         try:
-            yield self.app.get('/names/4', status=200)
+            yield self.app.get('/names/5', status=200)
             self.fail()
         except AssertionError:
             pass
@@ -23,7 +24,7 @@ class Tests(TestCase):
         resp = yield self.app.post('/names', 'name=Ann', status=201)
         new_item_path = resp.get_header('Location')
         resp = yield self.app.get(new_item_path, status=200)
-        assert resp.text == 'Ann'
+        assert resp.text == 'Ann', "{resp.text} != Ann".format(resp=resp)
 
     @defer.inlineCallbacks
     def test_put_with_body(self):
