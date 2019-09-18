@@ -1,12 +1,11 @@
-from _compat import StringIO
-from _compat import parse_qs
-
 from twisted.internet import defer
 from twisted.python.urlpath import URLPath
 from twisted.web.server import Site, NOT_DONE_YET
 from twisted.web.test.test_web import DummyRequest
 from twisted.web.http_headers import Headers
 
+from ._compat import StringIO
+from ._compat import parse_qs
 
 class TestClient(object):
     def __init__(self, resource):

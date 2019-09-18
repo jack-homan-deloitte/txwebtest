@@ -6,6 +6,6 @@ setup(
     name='txwebtest',
     version='0.1.1',
     install_requires=["klein", "twisted"],
-    py_modules=['txwebtest'],
+    packages=['txwebtest'],
     zip_safe=False,
 )

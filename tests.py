@@ -3,7 +3,7 @@ from twisted.internet import defer
 from twisted.trial.unittest import TestCase
 from txwebtest import TestClient, TestRequest
 
-from _compat import parse_qs
+from txwebtest._compat import parse_qs
 
 
 class Tests(TestCase):
